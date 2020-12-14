@@ -28,9 +28,10 @@ parseAny ('[':st) p =
     where (newSt, commandOrError) = parseLoop st []
 parseAny (sh:st) p = 
     case commandOrError of
-        Left e  -> if ignoreUnknownSymbol
+        Left UnknownSymbol -> if ignoreUnknownSymbol
                    then parseAny st p
-                   else Left e
+                   else Left UnknownSymbol
+        Left e  -> Left e
         Right c -> parseAny st (c:p)
     where commandOrError = parseSimple sh
 
